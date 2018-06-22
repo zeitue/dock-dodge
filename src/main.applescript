@@ -39,6 +39,7 @@ on HideDock()
 	if Status is equal to false then tell application "System Events" to set the autohide of the dock preferences to true
 end HideDock
 repeat
+	delay 0.2
 	set DockSize to GetDockSize() as integer
 	set WindowLocation to GetWindowLocation() as integer
 	if WindowLocation is less than or equal to (screenHeight - DockSize) then ShowDock()
