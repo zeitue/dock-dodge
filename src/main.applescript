@@ -1,3 +1,8 @@
+tell application "Finder"
+	set screenResolution to bounds of window of desktop
+	set screenHeight to item 4 of screenResolution
+end tell
+
 on GetWindowLocation()
 	set front_app to (path to frontmost application as Unicode text)
 	
@@ -36,7 +41,7 @@ end HideDock
 repeat
 	set DockSize to GetDockSize() as integer
 	set WindowLocation to GetWindowLocation() as integer
-	if WindowLocation is less than or equal to (1200 - DockSize) then ShowDock()
-	if WindowLocation is greater than (1200 - DockSize) then HideDock()
+	if WindowLocation is less than or equal to (screenHeight - DockSize) then ShowDock()
+	if WindowLocation is greater than (screenHeight - DockSize) then HideDock()
 end repeat
 
