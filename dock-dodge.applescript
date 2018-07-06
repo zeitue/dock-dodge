@@ -1,9 +1,14 @@
+tell application "Finder"
+	set screenResolution to bounds of window of desktop
+	set screenHeight to item 4 of screenResolution
+end tell
+
 on GetWindowLocation()
 	set front_app to (path to frontmost application as Unicode text)
 	
 	tell application front_app
 		try
-			item 1 of (get bounds of front window)
+			item 4 of (get bounds of front window)
 		on error
 			return 300
 		end try
@@ -12,9 +17,12 @@ on GetWindowLocation()
 end GetWindowLocation
 
 on GetDockSize()
-	tell application "System Events"
-		set DockLocation to (value of property list item "tilesize" of contents of property list file "~/Library/Preferences/com.apple.Dock.plist") - 29
+	tell application "System Events" to tell process "Dock"
+		set dock_dimensions to size in list 1
+		set dock_width to item 1 of dock_dimensions
+		set dock_height to item 2 of dock_dimensions
 	end tell
+	dock_height
 end GetDockSize
 
 on GetDockStatus()
@@ -31,10 +39,10 @@ on HideDock()
 	if Status is equal to false then tell application "System Events" to set the autohide of the dock preferences to true
 end HideDock
 repeat
+	delay 0.2
 	set DockSize to GetDockSize() as integer
 	set WindowLocation to GetWindowLocation() as integer
-	if WindowLocation is less than or equal to DockSize then HideDock()
-	if WindowLocation is greater than DockSize then ShowDock()
-	if WindowLocation is equal to "-1728" then ShowDock()
+	if WindowLocation is less than or equal to (screenHeight - DockSize) then ShowDock()
+	if WindowLocation is greater than (screenHeight - DockSize) then HideDock()
 end repeat
 
