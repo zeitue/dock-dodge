@@ -7,10 +7,14 @@ on GetWindowLocation()
 	tell application "System Events"
 		set activeApps to name of application processes whose frontmost is true
 		set currentApplication to item 1 of activeApps
-		set frontWindow to the first window of application process currentApplication
-		set windowSize to size of frontWindow
-		set windowPosition to position of frontWindow
-		return (item 2 of windowSize) + (item 2 of windowPosition)
+		try
+			set frontWindow to the first window of application process currentApplication
+			set windowSize to size of frontWindow
+			set windowPosition to position of frontWindow
+			return (item 2 of windowSize) + (item 2 of windowPosition)
+		on error
+			return 300
+		end try
 	end tell
 end GetWindowLocation
 
@@ -37,7 +41,7 @@ on HideDock()
 	if Status is equal to false then tell application "System Events" to set the autohide of the dock preferences to true
 end HideDock
 repeat
-	delay .2
+	delay 0.2
 	set DockSize to GetDockSize() as integer
 	set WindowLocation to GetWindowLocation() as integer
 	if WindowLocation is less than or equal to (screenHeight - DockSize) then ShowDock()
