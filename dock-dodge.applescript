@@ -4,16 +4,18 @@ tell application "Finder"
 end tell
 
 on GetWindowLocation()
-	set front_app to (path to frontmost application as Unicode text)
-	
-	tell application front_app
+	tell application "System Events"
+		set activeApps to name of application processes whose frontmost is true
+		set currentApplication to item 1 of activeApps
 		try
-			item 4 of (get bounds of front window)
+			set frontWindow to the first window of application process currentApplication
+			set windowSize to size of frontWindow
+			set windowPosition to position of frontWindow
+			return (item 2 of windowSize) + (item 2 of windowPosition)
 		on error
 			return 300
 		end try
 	end tell
-	
 end GetWindowLocation
 
 on GetDockSize()
@@ -45,4 +47,3 @@ repeat
 	if WindowLocation is less than or equal to (screenHeight - DockSize) then ShowDock()
 	if WindowLocation is greater than (screenHeight - DockSize) then HideDock()
 end repeat
-
