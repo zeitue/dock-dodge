@@ -8,7 +8,7 @@ on GetWindowLocation()
 		set activeApps to name of application processes whose frontmost is true
 		set currentApplication to item 1 of activeApps
 		try
-			set frontWindow to the first window of application process currentApplication
+			set frontWindow to the first window of application process currentApplication whose role description is "standard window"
 			set windowSize to size of frontWindow
 			set windowPosition to position of frontWindow
 			return (item 2 of windowSize) + (item 2 of windowPosition)
